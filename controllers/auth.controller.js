@@ -1,12 +1,63 @@
 const User = require("../model/user.model");
 const authUtil = require("../util/authentication");
 const validation = require("../util/validation");
+const sessionFlash = require("../util/session-flash");
 
 exports.getSignup = (req, res, next) => {
-  res.render("customer/auth/signup");
+  let sessionData = sessionFlash.getSessionData(req);
+
+  if (!sessionData) {
+    sessionData = {
+      email: "",
+      confirmEmail: "",
+      fullname: "",
+      password: "",
+      street: "",
+      postal: "",
+      city: "",
+    };
+  }
+
+  res.render("customer/auth/signup", {
+    inputData: sessionData,
+  });
+
 };
 
 exports.signup = async (req, res, next) => {
+  const enteredData = {
+    email: req.body.email,
+    confirmEmail: req.body["confirm-email"],
+    password: req.body.password,
+    fullname: req.body.fullname,
+    street: req.body.street,
+    postal: req.body.postal,
+    city: req.body.city,
+  };
+  if (
+    !validation.userDetailsAreValid(
+      req.body.email,
+      req.body.password,
+      req.body.fullname,
+      req.body.street,
+      req.body.postal,
+      req.body.city
+    ) &&
+    !validation.emailIsConfirmed(req.body.email, req.body["confirm-emails"])
+  ) {
+    sessionFlash.flashDataToSession(
+      req,
+      {
+        errorMessage: "Invalid inputs - Please try again!",
+        ...enteredData,
+      },
+      () => {
+        redirect("/signup");
+      } 
+      );
+    return
+  }
+
   const user = new User(
     req.body.email,
     req.body.password,
@@ -16,20 +67,21 @@ exports.signup = async (req, res, next) => {
     req.body.city
   );
 
-  if (
-    !validation.userDetailsAreValid(
-      req.body.email,
-      req.body.password,
-      req.body.fullname,
-      req.body.street,
-      req.body.postal,
-      req.body.city
-    ) && !validation.emailIsConfirmed(req.body.email, req.body['confirm-emails'])
-  ) {
-    return redirect("/signup");
-  }
-
   try {
+    const existingUser = await user.existAlready();
+    if (existingUser) {
+      sessionFlash.flashDataToSession(
+        req,
+        {
+          errorMessage: "Acount with this email already exist!",
+          ...enteredData,
+        },
+        () => {
+          res.redirect("/signup");
+        }
+      );
+      return;
+    }
     await user.signup();
   } catch (error) {
     return next(error);
@@ -38,7 +90,16 @@ exports.signup = async (req, res, next) => {
 };
 
 exports.getLogin = (req, res, next) => {
-  res.render("customer/auth/login");
+  let sessionData = sessionFlash.getSessionData(req);
+
+  if (!sessionData) {
+    sessionData = {
+      email: "",
+      password: "",
+    };
+  }
+
+  res.render("customer/auth/login", { inputData: sessionData });
 };
 
 exports.login = async (req, res, next) => {
@@ -51,7 +112,17 @@ exports.login = async (req, res, next) => {
   }
 
   if (!existingUser) {
-    return res.redirect("/login");
+    sessionFlash.flashDataToSession(
+      req,
+      {
+        errorMessage: "Invalid input - Please try again!",
+        email: user.email,
+        password: user.password,
+      },
+      () => {
+        return res.redirect("/login");
+      }
+    );
   }
 
   const passwordIsCorrect = await user.hasMathchingPassword(
@@ -59,7 +130,17 @@ exports.login = async (req, res, next) => {
   );
 
   if (!passwordIsCorrect) {
-    return res.redirect("/login");
+    sessionFlash.flashDataToSession(
+      req,
+      {
+        errorMessage: "Wrong password!",
+        email: user.email,
+        password: user.password,
+      },
+      () => {
+        return res.redirect("/login");
+      }
+    );
   }
 
   authUtil.createUserSession(req, existingUser, () => {
