@@ -14,7 +14,11 @@ exports.signup = async (req, res, next) => {
         req.body.postal,
         req.body.city
     )
-    await user.signup()
+    try{
+        await user.signup()
+    } catch (error){
+        return next(error)
+    }
     res.redirect("/login")
 }
 
