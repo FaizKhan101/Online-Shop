@@ -78,3 +78,23 @@ a {
     background-color: var(--color-primary-700);
     border-color: var(--color-primary-700);
 } 
+
+.alert {
+    border-radius: var(--border-radius-small);
+    background-color: var(--color-error-100);
+    color: var(--color-error-500);
+    padding:  var(--space-2) var(--space-4);
+    width: 50%;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.alert h2 {
+    font-size: 1rem;
+    margin: var(--space-2);
+    text-transform: uppercase;
+}
+
+.alert p {
+    margin: var(--space-2);
+}

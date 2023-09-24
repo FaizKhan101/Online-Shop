@@ -21,7 +21,6 @@ exports.getSignup = (req, res, next) => {
   res.render("customer/auth/signup", {
     inputData: sessionData,
   });
-
 };
 
 exports.signup = async (req, res, next) => {
@@ -53,9 +52,9 @@ exports.signup = async (req, res, next) => {
       },
       () => {
         redirect("/signup");
-      } 
-      );
-    return
+      }
+    );
+    return;
   }
 
   const user = new User(
@@ -115,14 +114,15 @@ exports.login = async (req, res, next) => {
     sessionFlash.flashDataToSession(
       req,
       {
-        errorMessage: "Invalid input - Please try again!",
+        errorMessage: "User with this email not found!",
         email: user.email,
         password: user.password,
       },
       () => {
-        return res.redirect("/login");
+        res.redirect("/login");
       }
     );
+    return;
   }
 
   const passwordIsCorrect = await user.hasMathchingPassword(
@@ -138,9 +138,10 @@ exports.login = async (req, res, next) => {
         password: user.password,
       },
       () => {
-        return res.redirect("/login");
+        res.redirect("/login");
       }
     );
+    return;
   }
 
   authUtil.createUserSession(req, existingUser, () => {
