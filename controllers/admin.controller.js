@@ -7,5 +7,7 @@ exports.getNewProduct = (req, res, next) => {
 }
 
 exports.createNewProduct = (req, res, next) => {
-
+    console.log({body: req.body});
+    console.log({file: req.file});
+    res.redirect("/admin/products")
 }
