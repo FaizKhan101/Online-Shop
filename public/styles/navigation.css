@@ -96,7 +96,7 @@ main {
 
 @media (min-width: 48rem) {
     main {
-        margin-top: 6rem ;
+        margin-top: 0 ;
     }
 
     #main-header {
