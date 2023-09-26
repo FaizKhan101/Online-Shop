@@ -8,3 +8,12 @@ exports.getProducts = async (req, res, next) => {
         next(error)
     }
 };
+
+exports.getProductDetails = async (req, res, next) => {
+    try {
+        const product = await Product.findById(req.params.id)
+        res.render("customer/products/product-details", { product })
+    } catch (error) {
+        next(error)
+    }
+}
