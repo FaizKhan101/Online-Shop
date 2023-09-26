@@ -1,5 +1,9 @@
 const Product = require("../model/product.model")
 
+exports.getCart = (req, res, next) => {
+    res.render("customer/cart/cart")
+}
+
 exports.addCartItem = async (req, res, next) => {
     let product;
     try {
