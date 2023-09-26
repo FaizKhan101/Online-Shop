@@ -1,9 +1,9 @@
 const express = require("express")
 
+const productsController = require("../controllers/products.controller")
+
 const router = express.Router()
 
-router.get("/products", (req, res, next) => {
-    res.render("customer/products/all-products")
-})
+router.get("/products", productsController.getProducts)
 
 module.exports = router
