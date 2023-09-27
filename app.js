@@ -10,6 +10,7 @@ const authRoutes = require("./routes/auth.routes");
 const productsRoutes = require("./routes/products.routes")
 const adminRoutes = require("./routes/admin.routes")
 const cartRoutes = require("./routes/cart.routes")
+const ordersrRoutes = require("./routes/orders.routes")
 const db = require("./data/database");
 const addCsrfTokenMiddleware = require("./middlewares/csrf-token")
 const errorHandlerMiddleware = require("./middlewares/error-handler")
@@ -24,6 +25,7 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use(express.static("public"));
 app.use("/products/assets", express.static("product-data"))
+app.use("/products/products/assets", express.static("product-data"))
 app.use("/admin/products/assets", express.static("product-data"))
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
@@ -43,6 +45,7 @@ app.use(authRoutes);
 app.use(productsRoutes)
 app.use('/cart', cartRoutes)
 app.use(protectRoutesMiddleware)
+app.use("/orders", ordersrRoutes)
 app.use("/admin", adminRoutes)
 
 app.use(errorHandlerMiddleware)
