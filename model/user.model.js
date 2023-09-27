@@ -41,6 +41,7 @@ class User {
     hasMathchingPassword(hashedPassword) {
         return bcrypt.compare(this.password, hashedPassword)
     }
+
 }
 
 module.exports = User;
