@@ -20,10 +20,10 @@ exports.addCartItem = async (req, res, next) => {
     })
 }
 
-exports.updateCartItem = (req, res, next) => {
+exports.updateCartItem = async (req, res, next) => {
     const cart = res.locals.cart
 
-    const updatedItemData = cart.updateItem(req.body.productId, req.body.quantity)
+    const updatedItemData = await cart.updateItem(req.body.productId, req.body.quantity)
 
     req.session.cart = cart
 
