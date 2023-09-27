@@ -1,3 +1,5 @@
+const db = require("../data/database")
+
 class Order {
     constructor(cart, userData, status = "pending", date, orderId){
         this.productData = cart;
@@ -15,5 +17,19 @@ class Order {
         this.id = orderId
     }
 
-    
+    save() {
+        if (this.id) {
+            //Update order
+        } else {
+            const orderDocument = {
+                userData: this.userData,
+                productData: this.productData,
+                date: new Date(),
+                status: this.status
+            }
+            return db.getDb().collection("orders").insertOne(orderDocument)
+        }
+    }
 }
+
+module.exports = Order
