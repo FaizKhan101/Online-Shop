@@ -1,4 +1,4 @@
-const Cart = require("../model/cart.model");
+const Cart = require("../models/cart.model");
 
 function initializeCart(req, res, next) {
   let cart;

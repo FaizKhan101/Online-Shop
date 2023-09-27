@@ -1,4 +1,4 @@
-const User = require("../model/user.model");
+const User = require("../models/user.model");
 const authUtil = require("../util/authentication");
 const validation = require("../util/validation");
 const sessionFlash = require("../util/session-flash");
