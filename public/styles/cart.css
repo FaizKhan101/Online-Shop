@@ -43,6 +43,7 @@
 #cart-total #cart-total-fallback {
     font-size: 1rem;
     font-weight: normal;
+    opacity: 0.75;
 }
 
 @media (min-width: 48rem) {
