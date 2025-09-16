@@ -6,7 +6,7 @@ let database;
 
 async function connectToDatabase() {
     try {
-        const client = await MongoClient.connect('mongodb+srv://FaizKhan:faizkhan8225@cluster0.3iavjwf.mongodb.net/WDE-shop?retryWrites=true&w=majority&appName=Cluster0', {
+        const client = await MongoClient.connect(process.env.MONGO_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
