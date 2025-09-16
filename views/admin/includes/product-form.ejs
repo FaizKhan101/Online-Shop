@@ -29,6 +29,6 @@
 
     <p>
         <button type="reset" class="btn btn-alt">Rest</button>
-        <button type="submit" class="btn">Add Product</button>
+        <button type="submit" class="btn"><% if (imageRequired) { %>Add Product<% } else { %>Edit Product<% } %></button>
     </p>
 </form>
